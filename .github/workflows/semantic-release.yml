@@ -1,9 +1,10 @@
 ---
-name: Semantic release
+name: semantic-release
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: [stack-build]
+    types: [completed]
+    branches: [main]
 
 jobs:
   build:
@@ -31,13 +32,14 @@ jobs:
           ci: ${{ github.ref == github.event.repository.default_branch }}
           extra_plugins: |
             conventional-changelog-conventionalcommits
-            semantic-release-mirror-version
+            @semantic-release/changelog
+            @semantic-release/git
+            github:haskell-github-trust/semantic-release-haddock-since
             semantic-release-stack-upload
 
       - name: Semantic release output
         run: |
-          echo default_branch: ${{ github.event.repository.default_branch }}
-          echo ref: ${{ github.ref_name }}
+          echo ref: ${{ github.ref }}
           echo dry_run: ${{ github.ref_name != github.event.repository.default_branch }}
           echo published: ${{ steps.semantic.outputs.new_release_published }}
           echo last_release: ${{ steps.semantic.outputs.last_release_version }}
