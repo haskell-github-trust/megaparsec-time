@@ -25,7 +25,7 @@ description: |
 dependencies:
   - base >= 4.7 && < 5
   - megaparsec >= 9.0 && < 10
-  - megaparsec-utils >= 0.1 && < 1
+  - megaparsec-utils >= 0.2 && < 1
   - parser-combinators >= 1.0 && < 2
   - time >= 1.10 && < 2
 
@@ -54,5 +54,7 @@ tests:
       - -with-rtsopts=-N
     dependencies:
       - megaparsec-time
+      - bytestring
       - hspec
       - QuickCheck
+      - text
