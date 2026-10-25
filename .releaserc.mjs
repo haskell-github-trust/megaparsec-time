@@ -13,7 +13,13 @@ export default {
       },
     ],
     "@semantic-release/release-notes-generator",
-    "semantic-release-haddock-since",
+    [
+      "semantic-release-haddock-since",
+      {
+        versionFiles: ["package.yaml"],
+        baseline: "api/megaparsec-time.api",
+      },
+    ],
     [
       "@semantic-release/changelog",
       {
@@ -24,10 +30,9 @@ export default {
     [
       "@semantic-release/git",
       {
-        assets: ["CHANGELOG.md", "*.cabal", "package.yaml", "api/*.api", "src/**/*.hs"],
+        assets: ["package.yaml", "CHANGELOG.md", "api/*.api", "src/**/*.hs"],
       },
     ],
     "@semantic-release/github",
-    "semantic-release-stack-upload",
   ],
 }

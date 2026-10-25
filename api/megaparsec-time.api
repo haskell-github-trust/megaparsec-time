@@ -1,0 +1,9 @@
+Text.Megaparsec.Time.DayResult
+Text.Megaparsec.Time.dateParser
+Text.Megaparsec.Time.dayParser
+Text.Megaparsec.Time.durationParser
+Text.Megaparsec.Time.gregorianDayParser
+Text.Megaparsec.Time.hoursParser
+Text.Megaparsec.Time.minutesParser
+Text.Megaparsec.Time.secondsParser
+Text.Megaparsec.Time.timeParser
