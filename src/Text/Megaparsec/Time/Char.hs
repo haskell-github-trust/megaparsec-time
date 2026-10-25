@@ -42,6 +42,8 @@ import Text.Megaparsec.Utils.Char (posNumParser)
 
 -- | Parse a tuple containing a day or not, and a 'TimeOfDay', separated with a
 -- space.
+--
+-- @since 0.3.0.0
 dateParser
   :: MonadFail m
   => MonadParsec e s m
@@ -55,6 +57,8 @@ dateParser = mkDateParser space1 dayParser timeParser
 --   * @yesterday@ or @tomorrow@
 --   * a day number relative to the current day i.e @+2@ is two days from today
 --   * an absolute number for a 'Data.Time.DayOfWeek', refer to its 'Num' instance for more information.
+--
+-- @since 0.3.0.0
 dayParser
   :: MonadParsec e s m
   => Token s ~ Char
@@ -63,6 +67,8 @@ dayParser = mkDayParser char' id digitChar id
 
 -- | Parse a 'NominalDiffTime' using strings like @1h23m45s@, with all
 -- components being optional as long as one is present.
+--
+-- @since 0.3.0.0
 durationParser
   :: MonadFail m
   => MonadParsec e s m
@@ -71,6 +77,8 @@ durationParser
 durationParser = mkDurationParser space hoursParser minutesParser secondsParser
 
 -- | Parse a Gregorian 'Day' from a @%F@ or @%d\/%m\/%Y@ format.
+--
+-- @since 0.3.0.0
 gregorianDayParser
   :: MonadFail m
   => MonadParsec e s m
@@ -79,6 +87,8 @@ gregorianDayParser
 gregorianDayParser = mkGregorianDayParser id
 
 -- | Parse a 'NominalDiffTime' from a number of hours from a string like @1h@.
+--
+-- @since 0.3.0.0
 hoursParser
   :: MonadFail m
   => MonadParsec e s m
@@ -87,6 +97,8 @@ hoursParser
 hoursParser = secondsToNominalDiffTime . (* 3600) <$> posNumParser <* char 'h'
 
 -- | Parse a 'NominalDiffTime' from a number of minutes from a string like @1m@.
+--
+-- @since 0.3.0.0
 minutesParser
   :: MonadFail m
   => MonadParsec e s m
@@ -95,6 +107,8 @@ minutesParser
 minutesParser = secondsToNominalDiffTime . (* 60) <$> posNumParser <* char 'm'
 
 -- | Parse a 'NominalDiffTime' from a number of seconds from a string like @1s@.
+--
+-- @since 0.3.0.0
 secondsParser
   :: MonadFail m
   => MonadParsec e s m
@@ -103,6 +117,8 @@ secondsParser
 secondsParser = secondsToNominalDiffTime <$> posNumParser <* optional (char 's')
 
 -- | Parse a 'TimeOfDay' from a string like @01:23@.
+--
+-- @since 0.3.0.0
 timeParser
   :: MonadFail m
   => MonadParsec e s m

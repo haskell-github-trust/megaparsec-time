@@ -41,10 +41,14 @@ import Text.Printf (printf)
 
 -- | Representation of a parser result with either a number of days relative to
 -- the current day, or a 'DayOfWeek'.
+--
+-- @since 0.3.0.0
 type DayResult = Either Int DayOfWeek
 
 -- | Build a parser for a tuple containing a day or not, and a 'TimeOfDay',
 -- separated with a space.
+--
+-- @since 0.3.0.0
 mkDateParser
   :: MonadParsec e s m
   => m ()
@@ -57,6 +61,8 @@ mkDateParser
 mkDateParser space1 day time = (,) <$> optional (try (day <* space1)) <*> time
 
 -- | Build a case-insensitive day parser, see 'Text.Megaparsec.Time.Char.dayParser'.
+--
+-- @since 0.3.0.0
 mkDayParser
   :: MonadParsec e s m
   => (Token s -> m (Token s))
@@ -90,6 +96,8 @@ mkDayParser char' fromChar digitChar toChar =
 
 -- | Build a 'NominalDiffTime' parser from hours, minutes and seconds parsers,
 -- with all components being optional as long as one is present.
+--
+-- @since 0.3.0.0
 mkDurationParser
   :: MonadParsec e s m
   => m ()
@@ -118,6 +126,8 @@ mkDurationParser space hoursParser minutesParser secondsParser =
     return (m + s)
 
 -- | Build a Gregorian 'Day' parser from a @%F@ or @%d\/%m\/%Y@ format.
+--
+-- @since 0.3.0.0
 mkGregorianDayParser
   :: MonadFail m
   => MonadParsec e s m
@@ -132,6 +142,8 @@ mkGregorianDayParser toChar = do
   parseTime "%F" <|> parseTime "%d/%m/%Y"
 
 -- | Build a 'TimeOfDay' parser from a string like @01:23@.
+--
+-- @since 0.3.0.0
 mkTimeParser
   :: MonadFail m
   => m t
