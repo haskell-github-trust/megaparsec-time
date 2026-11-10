@@ -35,7 +35,7 @@ jobs:
             conventional-changelog-conventionalcommits
             @semantic-release/changelog
             @semantic-release/git
-            github:haskell-github-trust/semantic-release-haddock-since
+            github:haskell-github-trust/semantic-release-haddock-since#1.0.2
 
       - name: Semantic release output
         env:
