@@ -94,8 +94,8 @@ mkDayParser char' fromChar digitChar toChar =
   absoluteDay = toEnum . read <$> digits
   relativeDay = ($) <$> sign <*> (read <$> digits)
 
--- | Build a 'NominalDiffTime' parser from hours, minutes and seconds parsers,
--- with all components being optional as long as one is present.
+-- | Build a 'NominalDiffTime' parser from days, hours, minutes and seconds
+-- parsers, with all components being optional as long as one is present.
 --
 -- @since 0.3.0.0
 mkDurationParser
@@ -103,15 +103,21 @@ mkDurationParser
   => m ()
   -- ^ Space parser.
   -> m NominalDiffTime
+  -- ^ Days parser.
+  -> m NominalDiffTime
   -- ^ Hours parser.
   -> m NominalDiffTime
   -- ^ Minutes parser.
   -> m NominalDiffTime
   -- ^ Seconds parser.
   -> m NominalDiffTime
-mkDurationParser space hoursParser minutesParser secondsParser =
-  try hours <|> try minutes <|> secondsParser
+mkDurationParser space daysParser hoursParser minutesParser secondsParser =
+  try days <|> hms
  where
+  days = (+) <$> (daysParser <* space) <*> (fromMaybe 0 <$> optional (try hms))
+
+  hms = try hours <|> try minutes <|> secondsParser
+
   hours = do
     h <- hoursParser <* space
     m <- fromMaybe 0 <$> optional (try minutes)

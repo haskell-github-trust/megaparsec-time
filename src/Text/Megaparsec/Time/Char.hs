@@ -14,6 +14,7 @@
 -- lazy 'Text').
 module Text.Megaparsec.Time.Char (
   -- * Simple parsers
+  daysParser,
   hoursParser,
   minutesParser,
   secondsParser,
@@ -65,16 +66,26 @@ dayParser
   => m DayResult
 dayParser = mkDayParser char' id digitChar id
 
--- | Parse a 'NominalDiffTime' using strings like @1h23m45s@, with all
+-- | Parse a 'NominalDiffTime' using strings like @2d1h23m45s@, with all
 -- components being optional as long as one is present.
 --
--- @since 0.3.0.0
+-- @since 0.4.0.0
 durationParser
   :: MonadFail m
   => MonadParsec e s m
   => Token s ~ Char
   => m NominalDiffTime
-durationParser = mkDurationParser space hoursParser minutesParser secondsParser
+durationParser = mkDurationParser space daysParser hoursParser minutesParser secondsParser
+
+-- | Parse a 'NominalDiffTime' from a number of days from a string like @1d@.
+--
+-- @since 0.4.0.0
+daysParser
+  :: MonadFail m
+  => MonadParsec e s m
+  => Token s ~ Char
+  => m NominalDiffTime
+daysParser = secondsToNominalDiffTime . (* 86400) <$> posNumParser <* char 'd'
 
 -- | Parse a Gregorian 'Day' from a @%F@ or @%d\/%m\/%Y@ format.
 --
