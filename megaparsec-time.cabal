@@ -5,7 +5,7 @@ cabal-version: 1.12
 -- see: https://github.com/sol/hpack
 
 name:           megaparsec-time
-version:        0.3.0.0
+version:        0.3.1.0
 synopsis:       Parsers and utilities for the Megaparsec library.
 description:    Common parsers and utilities to use with the Megaparsec library.
 category:       Parsing

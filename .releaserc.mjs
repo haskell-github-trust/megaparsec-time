@@ -30,7 +30,7 @@ export default {
     [
       "@semantic-release/git",
       {
-        assets: ["package.yaml", "CHANGELOG.md", "api/*.api", "src/**/*.hs"],
+        assets: ["package.yaml", "*.cabal", "CHANGELOG.md", "api/*.api", "src/**/*.hs"],
       },
     ],
     "@semantic-release/github",
