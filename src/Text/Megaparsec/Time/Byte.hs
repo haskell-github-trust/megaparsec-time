@@ -14,6 +14,7 @@
 -- 'Data.ByteString.ByteString').
 module Text.Megaparsec.Time.Byte (
   -- * Simple parsers
+  daysParser,
   hoursParser,
   minutesParser,
   secondsParser,
@@ -67,7 +68,7 @@ dayParser
   => m DayResult
 dayParser = mkDayParser char' fromChar digitChar toChar
 
--- | Parse a 'NominalDiffTime' using strings like @1h23m45s@, with all
+-- | Parse a 'NominalDiffTime' using strings like @2d1h23m45s@, with all
 -- components being optional as long as one is present.
 --
 -- @since 0.3.0.0
@@ -76,7 +77,15 @@ durationParser
   => MonadParsec e s m
   => Token s ~ Word8
   => m NominalDiffTime
-durationParser = mkDurationParser space hoursParser minutesParser secondsParser
+durationParser = mkDurationParser space daysParser hoursParser minutesParser secondsParser
+
+-- | Parse a 'NominalDiffTime' from a number of days from a string like @1d@.
+daysParser
+  :: MonadFail m
+  => MonadParsec e s m
+  => Token s ~ Word8
+  => m NominalDiffTime
+daysParser = secondsToNominalDiffTime . (* 86400) <$> posNumParser <* char (fromChar 'd')
 
 -- | Parse a Gregorian 'Day' from a @%F@ or @%d\/%m\/%Y@ format.
 --

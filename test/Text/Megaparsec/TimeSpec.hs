@@ -38,6 +38,7 @@ import Text.Megaparsec (Parsec, errorBundlePretty, runParser)
 import Text.Megaparsec.Time (
   dateParser,
   dayParser,
+  daysParser,
   durationParser,
   gregorianDayParser,
   hoursParser,
@@ -143,6 +144,10 @@ spec = do
       parseOrPrettyError dayParser (printf "+%d" (x :: Int)) `shouldSatisfy` isLeft
 
   describe "duration" $ do
+    it "days" . forAll positive $ \d ->
+      parseOrPrettyError daysParser (printf "%dd" d)
+        `shouldBe` Right (secondsToNominalDiffTime (fromInteger d * 86400))
+
     it "hours" . forAll positive $ \h ->
       parseOrPrettyError hoursParser (printf "%dh" h)
         `shouldBe` Right (secondsToNominalDiffTime (fromInteger h * 3600))
@@ -161,6 +166,22 @@ spec = do
           `shouldBe` Right (secondsToNominalDiffTime (fromInteger s))
 
     context "duration" $ do
+      context "days" $ do
+        it "dhms" . forAll ((,,,) <$> positive <*> positive <*> positive <*> positive) $ \(d, h, m, s) ->
+          parseOrPrettyError durationParser (printf "%dd %dh %dm %ds" d h m s)
+            `shouldBe` Right (secondsToNominalDiffTime (fromInteger ((((d * 24 + h) * 60 + m) * 60) + s)))
+
+        it "d" . forAll positive $ \d ->
+          parseOrPrettyError durationParser (printf "%dd" d)
+            `shouldBe` Right (secondsToNominalDiffTime (fromInteger (d * 86400)))
+
+        it "ds" . forAll ((,) <$> positive <*> positive) $ \(d, s) ->
+          parseOrPrettyError durationParser (printf "%dd%d" d s)
+            `shouldBe` Right (secondsToNominalDiffTime (fromInteger (d * 86400 + s)))
+
+      it "empty" $
+        parseOrPrettyError durationParser "" `shouldSatisfy` isLeft
+
       context "hours" $ do
         it "hms" . forAll ((,,) <$> positive <*> positive <*> positive) $ \(h, m, s) ->
           parseOrPrettyError durationParser (printf "%dh %dm %ds" h m s)

@@ -13,6 +13,7 @@ module Text.Megaparsec.Time (
   DayResult,
 
   -- * Simple parsers
+  Char.daysParser,
   Char.hoursParser,
   Char.minutesParser,
   Char.secondsParser,
