@@ -1,0 +1,2 @@
+- warn: {lhs: map, rhs: fmap, name: Use fmap}
+- warn: {lhs: a ++ b, rhs: a <> b, name: Use <>}

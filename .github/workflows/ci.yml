@@ -1,0 +1,79 @@
+---
+name: ci
+on:
+  push:
+    branches: main
+  pull_request:
+    branches: main
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    name: Generate matrix
+    runs-on: ubuntu-latest
+    outputs:
+      stack-yamls: ${{ steps.generate.outputs.stack-yamls }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: generate
+        uses: freckle/stack-action/generate-matrix@v5
+
+  single-constraints:
+    name: Single constraint per line
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: "! grep -rnPzo '\\([^()]*,[^()]*\\)\\s*=>' src test"
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: haskell-actions/hlint-setup@v2
+      - uses: haskell-actions/hlint-run@v2
+        with:
+          path: .
+          fail-on: suggestion
+
+  format:
+    name: Format check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: haskell-actions/run-fourmolu@v13
+        with:
+          version: "0.21.0.0"
+          pattern: |
+            src/**/*.hs
+            test/**/*.hs
+
+  build:
+    name: ${{ matrix.stack-yaml }} / ${{ matrix.os }}
+    needs: generate
+    runs-on: ${{ matrix.os == 'macos' && 'macos-15' || format('{0}-latest', matrix.os) }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu, macos, windows]
+        stack-yaml: ${{ fromJSON(needs.generate.outputs.stack-yamls) }}
+
+    env:
+      STACK_YAML: ${{ matrix.stack-yaml }}
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: freckle/stack-action@v5
+        with:
+          stack-build-arguments: --ghc-options=-Werror
+
+      - name: Check cabal file
+        run: stack exec -- cabal check
+        continue-on-error: true
+
+      - name: Build documentation
+        run: stack haddock --no-haddock-deps
+...

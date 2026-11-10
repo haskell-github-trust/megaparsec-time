@@ -36,8 +36,10 @@ jobs:
       matrix:
         os: [ubuntu, macos, windows]
         stack-yaml: ${{ fromJSON(needs.generate.outputs.stack-yamls) }}
+
     env:
       STACK_YAML: ${{ matrix.stack-yaml }}
+
     steps:
       - uses: actions/checkout@v7
 
