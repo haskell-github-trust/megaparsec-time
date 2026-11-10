@@ -1,5 +1,6 @@
 Text.Megaparsec.Time.Byte.dateParser
 Text.Megaparsec.Time.Byte.dayParser
+Text.Megaparsec.Time.Byte.daysParser
 Text.Megaparsec.Time.Byte.durationParser
 Text.Megaparsec.Time.Byte.gregorianDayParser
 Text.Megaparsec.Time.Byte.hoursParser
@@ -8,6 +9,7 @@ Text.Megaparsec.Time.Byte.secondsParser
 Text.Megaparsec.Time.Byte.timeParser
 Text.Megaparsec.Time.Char.dateParser
 Text.Megaparsec.Time.Char.dayParser
+Text.Megaparsec.Time.Char.daysParser
 Text.Megaparsec.Time.Char.durationParser
 Text.Megaparsec.Time.Char.gregorianDayParser
 Text.Megaparsec.Time.Char.hoursParser
@@ -23,6 +25,7 @@ Text.Megaparsec.Time.Common.mkTimeParser
 Text.Megaparsec.Time.DayResult
 Text.Megaparsec.Time.dateParser
 Text.Megaparsec.Time.dayParser
+Text.Megaparsec.Time.daysParser
 Text.Megaparsec.Time.durationParser
 Text.Megaparsec.Time.gregorianDayParser
 Text.Megaparsec.Time.hoursParser

@@ -80,6 +80,8 @@ durationParser
 durationParser = mkDurationParser space daysParser hoursParser minutesParser secondsParser
 
 -- | Parse a 'NominalDiffTime' from a number of days from a string like @1d@.
+--
+-- @since 0.3.1.0
 daysParser
   :: MonadFail m
   => MonadParsec e s m
