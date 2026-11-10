@@ -85,12 +85,12 @@ mkDayParser char' fromChar digitChar toChar =
     ]
  where
   str = try . traverse_ (char' . fromChar)
-  shortDay = choice $ map (dayString (take 3 . show)) weekDays
-  longDay = choice $ map (dayString show) weekDays
+  shortDay = choice $ fmap (dayString (take 3 . show)) weekDays
+  longDay = choice $ fmap (dayString show) weekDays
   dayString f d = str (f d) $> d
   weekDays = [Monday .. Friday]
   sign = (str "-" $> negate) <|> (str "+" $> id)
-  digits = map toChar <$> some digitChar
+  digits = fmap toChar <$> some digitChar
   absoluteDay = toEnum . read <$> digits
   relativeDay = ($) <$> sign <*> (read <$> digits)
 
@@ -141,7 +141,7 @@ mkGregorianDayParser
   -- ^ Convert a token to a 'Char'.
   -> m Day
 mkGregorianDayParser toChar = do
-  s <- map toChar <$> many anySingle
+  s <- fmap toChar <$> many anySingle
 
   let parseTime = flip (parseTimeM False defaultTimeLocale) s
 
@@ -160,8 +160,8 @@ mkTimeParser
   -- ^ Convert a token to a 'Char'.
   -> m TimeOfDay
 mkTimeParser digitChar colon toChar = do
-  h <- read . map toChar <$> replicateM 2 digitChar <* colon
-  m <- read . map toChar <$> replicateM 2 digitChar
+  h <- read . fmap toChar <$> replicateM 2 digitChar <* colon
+  m <- read . fmap toChar <$> replicateM 2 digitChar
 
   maybe
     (fail (printf "invalid hours or minutes %02d:%02d" h m))
